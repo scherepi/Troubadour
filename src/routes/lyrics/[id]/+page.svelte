@@ -20,28 +20,6 @@
     let source = $state("Hi! Start highlighting to make annotations, or *click* an existing one. P.S: Annotations support ***Markdown!***");
 
     type Annotation = {id: number, song_id: string, body: string, start_index: number, end_index: number, user_id: string}
-    
-    function getOriginalIndex(container: HTMLElement, node: Node, offset: number): number {
-        let index = 0;
-        let found = false;
-        function walk(current: Node): boolean {
-            if (current === node) {
-                index += offset;
-                found = true;
-                return true;
-            }
-            if (current.nodeType === Node.TEXT_NODE) {
-                if (!found) index += current.textContent?.length ?? 0;
-            } else {
-                for (let child of current.childNodes) {
-                    if (walk(child)) return true;
-                }
-            }
-            return false;
-        }
-        walk(container);
-        return index;
-    }
 
     function getSelectionIndices(container: HTMLElement): [number, number] {
         const selection = window.getSelection();
