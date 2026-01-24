@@ -1,11 +1,9 @@
-import { writable } from 'svelte/store'
+import { writable } from 'svelte/store';
 
 export type SidebarContent = {
-  imageSrc: string
-  title: string
-  artist: string
+    imageSrc: string
+    title: string
+    artist: string
 }
 
-export const sidebarContent = writable<SidebarContent | null>(null)
-
-
+export const sidebarContent = writable<SidebarContent | null>(null);
