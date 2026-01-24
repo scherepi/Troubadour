@@ -24,7 +24,31 @@ export const load: PageServerLoad = async ({ locals: { safeGetSession, supabase 
 
     if (error) throw error;
 
-    return { lyrics: data, user, username };
+    const songs: Array<{ id: string; title: string; artist: string; album_url: string; album_name: string }> = [
+        { 
+            id: "1", 
+            title: "ZUSHI", 
+            artist: "Dean Blunt",
+            album_url: "/imgs/zushi.jpeg",
+            album_name: "ZUSHI"
+        },
+        { 
+            id: "2", 
+            title: "Demons Sing Love Songs", 
+            artist: "Unwound",
+            album_url: "/imgs/unwound.webp",
+            album_name: ""
+        },
+        { 
+            id: "3", 
+            title: "White Ferrari", 
+            artist: "Frank Ocean",
+            album_url: "/imgs/blonde.jpg",
+            album_name: "Blonde"
+        }
+    ];
+
+    return { lyrics: data, user, username, songs };
 }
 
 export const actions: Actions = {

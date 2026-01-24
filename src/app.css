@@ -1,1 +1,17 @@
 @import "tailwindcss";
+@import "./avara/font.css";
+@import "./manifont/font.css";
+
+@theme {
+	--font-avara-black: "Avara_Black", serif;
+	--font-avara-bold: "Avara_Bold", serif;
+	--font-avara-bold-italic: "Avara_Bold Italic", serif;
+	--font-manifont-book: "ManifontGroteskBook", sans-serif;
+	--font-manifont-bold: "ManifontGroteskBold", sans-serif;
+	--font-manifont-bold-italic: "ManifontGroteskBoldItalic", sans-serif;
+}
+img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}

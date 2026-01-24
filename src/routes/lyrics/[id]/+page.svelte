@@ -1,15 +1,15 @@
 <script lang="ts">
-    import { fade, fly, blur } from "svelte/transition";
-    import { enhance } from "$app/forms";
     import { onMount } from "svelte";
     import Markdown from "@magidoc/plugin-svelte-marked";
-
+    import TopBar from "$lib/components/TopBar.svelte";
+    import "../../../avara/font.css";
+    import "../../../manifont/font.css";
+	import Button from "$lib/components/Button.svelte";
+    import Footer from "$lib/components/Footer.svelte";
     let props = $props();
     let { lyrics, annotations, user, username } = props.data;
     let mounted: boolean = $state(false);
     let editing: boolean = $state(false);
-
-    let lyricBody: string = $state(lyrics[0].body.replace(/\r\n/g, '\n'));
 
     let highlightedContent: string = $state("");
     let highlightStartIndex: number | undefined = $state(0);
@@ -18,6 +18,8 @@
     let activeAnnotation = $state("");
 
     let source = $state("Hi! Start highlighting to make annotations, or *click* an existing one. P.S: Annotations support ***Markdown!***");
+
+    let rightPanelVisible: boolean = $state(false);
 
     type Annotation = {id: number, song_id: string, body: string, start_index: number, end_index: number, user_id: string}
 
@@ -56,7 +58,7 @@
                 result += lyrics.slice(lastIndex, ann.start_index);
 
                 // Add annotated span
-                const injectionString = `<span class="bg-blue-100 cursor-pointer" data-ann="${ann.id}" data-start-index="${ann.start_index}" data-end-index="${ann.end_index}">${lyrics.slice(ann.start_index, ann.end_index)}</span>`
+                const injectionString = `<span class="annotated-text cursor-pointer" data-ann="${ann.id}" data-start-index="${ann.start_index}" data-end-index="${ann.end_index}">${lyrics.slice(ann.start_index, ann.end_index)}</span>`
                 result += injectionString;
 
                 lastIndex = ann.end_index;
@@ -69,11 +71,15 @@
             return result;
         }
 
-        lyricBody = renderAnnotatedLyrics(lyrics[0].body.replace(/\r\n/g, '\n'), annotations);
+        //lyricBody = renderAnnotatedLyrics(lyrics[0].body.replace(/\r\n/g, '\n'), annotations);
 
         document.addEventListener("selectionchange", () => {
             const selection = window.getSelection();
             const container = document.getElementById('lyric-container');
+            const rightContainer = document.getElementById('annotation-container');
+            if (selection && rightContainer && selection.anchorNode && rightContainer.contains(selection.anchorNode)) {
+                return;
+            }
             if (
                 selection &&
                 selection.anchorNode &&
@@ -87,10 +93,18 @@
                 highlightStartIndex = start;
                 highlightEndIndex = end;
                 editing = highlightedContent.length > 0;
+                rightPanelVisible = editing;
             } else {
                 highlightedContent = "";
+                if (!activeAnnotation && !editing) rightPanelVisible = false;
             }
         });
+
+        const handleGlobalClick = (e: MouseEvent) => handleAnnotationClick(e);
+        document.addEventListener('click', handleGlobalClick);
+        return () => {
+            document.removeEventListener('click', handleGlobalClick);
+        }
         mounted = true;
     })
 
@@ -104,40 +118,96 @@
 </script>
 
 <style lang="postcss">
+    @reference "tailwindcss";
+
+    :global(html) {
+        background-color: #BDBDBD;
+        overflow-x: hidden;
+    }
+    :global(body) {
+        margin: 0;
+        overflow-x: hidden;
+    }
+
     #lyric-container, #annotation-container {
         scrollbar-width: none;
     }
+
+    :global(.annotated-text) {
+        background-color: #023E8A;
+        color: #BDBDBD;
+        padding: 2px 4px;
+        position: relative;
+    }
+    :global(.annotated-text::after) {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        font-size: 12px;
+        background: #023E8A;
+        color: #BDBDBD;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 </style>
 
-<header class="fixed top-2 left-0 w-full z-10">
-    {#if mounted}<a href="/dashboard"><h4 id="return" class="text-xl fixed left-1/10 top-5.5 italic text-cyan-950" transition:blur={{duration: 5000}}>back to dashboard</h4></a>{/if}
-    <h3 id="title" class="text-3xl self-center text-gray-600 text-shadow-cyan-900/50 font-bold text-center mt-2 font-[Crimson_Pro]" transition:blur>Troubadour</h3>
-    <h4 id="username" class="text-2xl fixed right-1/7 top-5.5 text-cyan-950 font-[Schibsted_Grotesk] font-extrabold italic text-shadow-white text-shadow-lg/70 text-shadow">{username.data[0].username}</h4>
-    <form action="?/signout" method="POST" use:enhance>
-        <input id="signout" type="submit" class="fixed text-xl right-5 top-3 text-cyan-800 border-2 border-rose-700 rounded-2xl p-3 italic font-medium bg-white" value="Sign-out">
-    </form>
-</header>
+<TopBar username={username?.data?.[0]?.username ?? user?.email ?? ''} />
 
-<div id="lyric-container" role="generic" class="fixed left-2 w-11/24 h-120 border-black border-2 rounded-xl top-20 bg-white overflow-y-scroll text-xl" onclick={() => {
-    // if mouse-click without selection, switch to review mode
-    if (window.getSelection()?.toString().length == 0) { editing = false; }
-}}>
-    <pre class="font-[Crimson_Pro] mt-3 text-lg/10 text-center" onclick={handleAnnotationClick}>{@html lyricBody}</pre> <!-- WARNING: This has the potential for XSS attacks. This needs to be addressed. But right now, I can't think of a way this can be exploited against another person - you can only access your own annotations, because of RLS.-->
-</div>
+<div class="min-h-screen w-full bg-[#BDBDBD] pt-16">
+    <div class="mt-4 bg-[#BDBDBD] p-4">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 justify-center items-start">
+            <aside class="hidden lg:flex flex-col items-center space-y-4">
+                <div class="relative mt-20">
+                    <img 
+                        src="/imgs/talkiewalkie.jpg" 
+                        alt="Album preview"
+                        class="w-64 h-64 object-cover border-2 border-[#023E8A] mt-4"
+                    />
+                </div>
+                <div class="text-right space-y-1 px-0">
+                    <h1 class="text-[#023E8A] font-avara-bold-italic text-2xl leading-none">Cherry Blossom Girl</h1>
+                    <h1 class="text-[#023E8A] font-manifont-bold text-2xl leading-tight">AIR</h1>
+                </div>
+            </aside>
 
-<div id="annotation-container" class="fixed right-2 w-11/24 h-120 border-black/70 border-2 top-20 bg-amber-50 overflow-y-scroll text-2xl">
-    {#if !editing}
-    <Markdown {source} />
-    {:else}
-    <form action="?/annotate" method="POST">
-    <textarea bind:value={activeAnnotation} name="annotation" placeholder="I really like how Michael Gira..." id="annotation-body" required class="w-full" rows=13 ></textarea>
-    <input type="hidden" bind:value={highlightStartIndex} name="start_index">
-    <input type="hidden" bind:value={highlightEndIndex} name="end_index">
-    <input type="hidden" value={lyrics[0].id} name="song_id">
-    <input type="submit" class="bg-green-300 border-2 border-green-400 inline-block rounded-full w-20 font-[Schibsted_Grotesk] absolute bottom-10 left-1/2 -translate-x-1/2 italic font-light" value="Save">
-    </form>
-    {/if}
-    <h4 class="absolute left-1/2 {editing ? "text-amber-500" : "text-blue-500"} -translate-x-1/2 bottom-0 font-light font-[Crimson_Pro]">{editing ? 'Edit Mode' : 'Review Mode'}</h4>
+            <div id="lyric-container" aria-label="lyrics" role="region" class="text-left border-2 border-[#023E8A] bg-[#BDBDBD] overflow-y-scroll text-xl min-h-[30rem] max-h-[35rem] p-6">
+                <pre class="font-manifont-bold text-[#023E8A] text-lg leading-none">{@html lyricBody}</pre>
+            </div>
+
+            {#if rightPanelVisible}
+                <div id="annotation-container" class=" bg-[#BDBDBD] text-xl p-4 relative flex justify-center">
+                    {#if !editing}
+                        <div class="w-full max-w-[620px] mt-20">
+                            <div class="border-2 border-[#023E8A] p-4 max-h-[10rem]">
+                                <div class="text-[#023E8A] font-manifont-book leading-relaxed">
+                                    <Markdown {source} />
+                                </div>
+                            </div>
+                            <p class="text-[#023E8A] font-manifont-book italic text-sm mt-2 ml-1">review mode</p>
+                        </div>
+                    {:else}
+                        <form action="?/annotate" method="POST" class="w-full max-w-[500px] mt-30">
+                            <label for="annotation-body" class="block text-[#023E8A] font-manifont-bold mb-2">add your annotation:</label>
+                            <textarea bind:value={activeAnnotation} name="annotation" placeholder="this section makes me feel..." id="annotation-body" required class="w-full border-2 border-[#023E8A] p-2 font-manifont-book text-[#023E8A] h-40" rows=10 ></textarea>
+                            <input type="hidden" bind:value={highlightStartIndex} name="start_index">
+                            <input type="hidden" bind:value={highlightEndIndex} name="end_index">
+                            <input type="hidden" value={lyrics && lyrics.length > 0 ? lyrics[0].id : 'demo'} name="song_id">
+                            <p class="text-[#023E8A] font-manifont-book italic text-sm mt-2 ml-1">edit mode</p>
+                            <div class="flex gap-3 justify-end mt-0">
+                                <Button text="cancel" callBackFunction={() => { activeAnnotation = ''; rightPanelVisible = false; }} />
+                                <Button text="save" callBackFunction={""} />
+                            </div>
+                        </form>
+                    {/if}
+                </div>
+            {/if}
+        </div>
+    </div>
+    <Footer />
 </div>
 
 <!--<p class="fixed bottom-0.5 left-1/2 -translate-x-1/2">Selected: {highlightedContent}</p> -->

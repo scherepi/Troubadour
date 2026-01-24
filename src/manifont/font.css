@@ -1,0 +1,54 @@
+@font-face {
+    font-family: 'ManifontGroteskBold';
+    src:    url('ManifontGroteskBold-webfonts/ManifontGroteskBold-webfont.eot');
+    src:    url('ManifontGroteskBold-webfonts/ManifontGroteskBold-webfont.eot?#iefix') format('embedded-opentype'),
+            url('ManifontGroteskBold-webfonts/ManifontGroteskBold-webfont.woff') format('woff'),
+            url('ManifontGroteskBold-webfonts/ManifontGroteskBold-webfont.ttf') format('truetype'),
+            url('ManifontGroteskBold-webfonts/ManifontGroteskBold-webfont.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ManifontGroteskBoldItalic';
+    src:    url('ManifontGroteskBoldItalic-webfonts/ManifontGroteskBoldItalic-webfont.eot');
+    src:    url('ManifontGroteskBoldItalic-webfonts/ManifontGroteskBoldItalic-webfont.eot?#iefix') format('embedded-opentype'),
+            url('ManifontGroteskBoldItalic-webfonts/ManifontGroteskBoldItalic-webfont.woff') format('woff'),
+            url('ManifontGroteskBoldItalic-webfonts/ManifontGroteskBoldItalic-webfont.ttf') format('truetype'),
+            url('ManifontGroteskBoldItalic-webfonts/ManifontGroteskBoldItalic-webfont.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ManifontGroteskBook';
+    src:    url('ManifontGroteskBook-webfonts/ManifontGroteskBook-webfont.eot');
+    src:    url('ManifontGroteskBook-webfonts/ManifontGroteskBook-webfont.eot?#iefix') format('embedded-opentype'),
+            url('ManifontGroteskBook-webfonts/ManifontGroteskBook-webfont.woff') format('woff'),
+            url('ManifontGroteskBook-webfonts/ManifontGroteskBook-webfont.ttf') format('truetype'),
+            url('ManifontGroteskBook-webfonts/ManifontGroteskBook-webfont.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ManifontGroteskBookDot';
+    src:    url('ManifontGroteskBookDot-webfonts/ManifontGroteskBookDot-webfont.eot');
+    src:    url('ManifontGroteskBookDot-webfonts/ManifontGroteskBookDot-webfont.eot?#iefix') format('embedded-opentype'),
+            url('ManifontGroteskBookDot-webfonts/ManifontGroteskBookDot-webfont.woff') format('woff'),
+            url('ManifontGroteskBookDot-webfonts/ManifontGroteskBookDot-webfont.ttf') format('truetype'),
+            url('ManifontGroteskBookDot-webfonts/ManifontGroteskBookDot-webfont.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ManifontGroteskBookItalic';
+    src:    url('ManifontGroteskBookItalic-webfonts/ManifontGroteskBookItalic-webfont.eot');
+    src:    url('ManifontGroteskBookItalic-webfonts/ManifontGroteskBookItalic-webfont.eot?#iefix') format('embedded-opentype'),
+            url('ManifontGroteskBookItalic-webfonts/ManifontGroteskBookItalic-webfont.woff') format('woff'),
+            url('ManifontGroteskBookItalic-webfonts/ManifontGroteskBookItalic-webfont.ttf') format('truetype'),
+            url('ManifontGroteskBookItalic-webfonts/ManifontGroteskBookItalic-webfont.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

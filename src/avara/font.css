@@ -1,0 +1,35 @@
+@font-face {
+    font-family: 'Avara_Bold';
+    src:    url('Bold/Avara-Bold.eot');
+    src:    url('Bold/Avara-Bold.eot?#iefix') format('embedded-opentype'),
+            url('Bold/Avara-Bold.woff') format('woff'),
+            url('Bold/Avara-Bold.woff2') format('woff2'),
+            url('Bold/Avara-Bold.ttf') format('truetype'),
+            url('Bold/Avara-Bold.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Avara_Bold Italic';
+    src:    url('BoldItalic/Avara-BoldItalic.eot');
+    src:    url('BoldItalic/Avara-BoldItalic.eot?#iefix') format('embedded-opentype'),
+            url('BoldItalic/Avara-BoldItalic.woff') format('woff'),
+            url('BoldItalic/Avara-BoldItalic.woff2') format('woff2'),
+            url('BoldItalic/Avara-BoldItalic.ttf') format('truetype'),
+            url('BoldItalic/Avara-BoldItalic.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Avara_Black';
+    src:    url('Black/Avara-Black.eot');
+    src:    url('Black/Avara-Black.eot?#iefix') format('embedded-opentype'),
+            url('Black/Avara-Black.woff') format('woff'),
+            url('Black/Avara-Black.woff2') format('woff2'),
+            url('Black/Avara-Black.ttf') format('truetype'),
+            url('Black/Avara-Black.svg#svgFontName') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
